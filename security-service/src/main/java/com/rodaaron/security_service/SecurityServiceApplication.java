@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -22,19 +23,19 @@ public class SecurityServiceApplication {
 	}
 
 	@Bean
-	CommandLineRunner init(IUserRepository userRepository, IRoleRepository roleRepository){
+	CommandLineRunner init(IUserRepository userRepository, IRoleRepository roleRepository, PasswordEncoder passwordEncoder){
 		return args -> {
 
 			RoleEntity roleAdmin = RoleEntity.builder()
-					.role_name(RoleEnum.ADMIN)
+					.roleName(RoleEnum.ADMIN)
 					.build();
 
 			RoleEntity roleEmployee = RoleEntity.builder()
-					.role_name(RoleEnum.EMPLOYEE)
+					.roleName(RoleEnum.EMPLOYEE)
 					.build();
 
 			RoleEntity roleGuest = RoleEntity.builder()
-					.role_name(RoleEnum.GUEST)
+					.roleName(RoleEnum.GUEST)
 					.build();
 
 			roleRepository.saveAll(List.of(roleAdmin,roleEmployee,roleGuest));
@@ -43,22 +44,34 @@ public class SecurityServiceApplication {
 
 			UserEntity userAdmin = UserEntity.builder()
 					.username("$admin")
-					.password("1234")
+					.password(passwordEncoder.encode("1234"))
 					.roleEntity(roleAdmin)
+					.accountNoExpired(true)
+					.accountNoLocked(true)
+					.credentialNoExpired(true)
+					.isEnabled(true)
 					.build();
 
 
 			UserEntity userEmployee = UserEntity.builder()
 					.username("$employee")
-					.password("1234")
+					.password(passwordEncoder.encode("1234"))
 					.roleEntity(roleEmployee)
+					.accountNoExpired(true)
+					.accountNoLocked(true)
+					.credentialNoExpired(true)
+					.isEnabled(true)
 					.build();
 
 
 			UserEntity userGuest = UserEntity.builder()
 					.username("$guest")
-					.password("1234")
+					.password(passwordEncoder.encode("1234"))
 					.roleEntity(roleGuest)
+					.accountNoExpired(true)
+					.accountNoLocked(true)
+					.credentialNoExpired(true)
+					.isEnabled(true)
 					.build();
 
 
